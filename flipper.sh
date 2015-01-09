@@ -11,21 +11,28 @@ keyboard_name='AT Translated Set 2 keyboard'
 touchpad_name='SYN1B7B:01 06CB:2969 UNKNOWN'
 osd_bin='/usr/bin/onboard'
 notify='on' #set to anything else to disable
+debug='off' #set to on for verbose output or run with -v
 #touchscreen_name='ELAN Touchscreen'
 
 ############### 
 ##    end    ##
 
 
+
+
 ##### function area #####
 function disable_keyboard {
 	xinput disable "$keyboard_name"
-	echo "I: Keyboard Disabled"
+	if [ $debug = "on" ]; then
+		echo "I: Keyboard Disabled"
+	fi
 }
 
 function enable_keyboard {
 	xinput enable "$keyboard_name"
-	echo "I: Keyboard Enabled"
+	if [ $debug = "on" ]; then
+		echo "I: Keyboard Enabled"
+	fi
 }
 
 function get_keyboard_state {
@@ -33,14 +40,23 @@ function get_keyboard_state {
 
 }
 
-function set_keyboard_state {
+function print_keyboard_state {
+if [ $debug = "on" ]; then
 	echo "I: keyboard current state: $kbstate"
-	if [ $kbstate != 0 ]; then 
+	if [ $kbstate != 0 ]; then
 		echo "I: assuming keyboard enabled.."
+	else	
+		echo "I: assuming keyboard disabled.."
+	fi
+fi
+}
+
+function set_keyboard_state {
+	print_keyboard_state
+	if [ $kbstate != 0 ]; then 
 		disable_keyboard
 		eval '$osd_bin'
 	else
-		echo "I: assuming keyboard disabled.."
 		enable_keyboard
 		eval "/usr/bin/pkill -f $osd_bin"
 	fi
@@ -51,25 +67,38 @@ function get_touchpad_state {
 	tpstate=$(xinput list-props "$touchpad_name" | grep Enabled | awk '{print $4}')
 }
 
-function set_touchpad_state {
+function print_touchpad_state {
+if [ $debug = "on" ]; then
 	echo "I: touchpad current state: $tpstate"
-	if [ $tpstate != 0 ]; then 
+	if [ $tpstate != 0 ]; then
 		echo "I: assuming touchpad enabled.."
+	else	
+		echo "I: assuming touchpad disabled.."
+	fi
+fi
+}
+
+function set_touchpad_state {
+	print_touchpad_state
+	if [ $tpstate != 0 ]; then 
 		disable_touchpad
 	else
-		echo "I: assuming touchpad disabled.."
 		enable_touchpad
 	fi
 }
 
 function disable_touchpad {
 	xinput disable "$touchpad_name"
-	echo "I: Touchpad Disabled"
+	if [ $debug = "on" ]; then
+		echo "I: Touchpad Disabled"
+	fi
 }
 
 function enable_touchpad {
 	xinput enable "$touchpad_name"
-	echo "I: Touchpad Enabled"
+	if [ $debug = "on" ]; then
+		echo "I: Touchpad Enabled"
+	fi
 }
 
 function rotate_screen {
@@ -94,11 +123,11 @@ function notify_user {
 function error_detection {
 	if [ $kbstate != $tpstate ]; then
 		echo "E: Incostitent States detected"
-		echo "E: Current tpstate =$tpstate"
-		echo "E: Current kbstate =$kbstate"
+		echo "E: Touchpad: $touchpad_name State = $tpstate"
+		echo "E: Keyboard: $keyboard_name State = $kbstate"
 		echo "E: Manually correct states in order for flipper to work"
 			if [ $notify = "on" ]; then
-				notify-send -i dialog-error "Not enabling tablet mode due to state errors"
+				notify-send -i dialog-error "Not enabling tablet mode due to state errors, use -n to view"
 			fi
 		exit
 	fi
@@ -115,10 +144,48 @@ function toggle_tablet_mode {
 	set_keyboard_state
 }
 
-##main
-#set_touchpad_state
-#set_keyboard_state
-get_input_states
-error_detection
-notify_user
-toggle_tablet_mode
+function flipper_go {
+	get_input_states
+	error_detection
+	notify_user
+	toggle_tablet_mode
+
+}
+
+function flipper_go_dry {
+	get_input_states
+	print_touchpad_state
+	print_keyboard_state
+
+}
+#########################
+##         end         ## 
+
+
+##### argument area #####
+while getopts "vn" opt; do
+	case $opt in
+	v)
+		echo "I: verbose debugging enabled"
+		debug="on"
+		flipper_go
+		exit
+		;;
+	n)
+		echo "I: Dry-run, reporting state information only"
+		debug="on"
+		flipper_go_dry 
+		echo "I: TURN THIS THING OFF IM DRYYYYYYY"
+		exit
+		;;
+	\?) 
+		echo "Invalid argument, quitting"
+		exit
+		;;
+	esac
+done 
+#########################
+##         end         ## 
+
+# exec w/o args
+flipper_go
