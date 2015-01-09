@@ -91,6 +91,19 @@ function notify_user {
 	fi
 }
 
+function error_detection {
+	if [ $kbstate != $tpstate ]; then
+		echo "E: Incostitent States detected"
+		echo "E: Current tpstate =$tpstate"
+		echo "E: Current kbstate =$kbstate"
+		echo "E: Manually correct states in order for flipper to work"
+			if [ $notify = "on" ]; then
+				notify-send -i dialog-error "Not enabling tablet mode due to state errors"
+			fi
+		exit
+	fi
+}
+
 function get_input_states {
 	get_touchpad_state
 	get_keyboard_state
@@ -106,5 +119,6 @@ function toggle_tablet_mode {
 #set_touchpad_state
 #set_keyboard_state
 get_input_states
+error_detection
 notify_user
 toggle_tablet_mode
