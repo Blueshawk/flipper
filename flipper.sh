@@ -10,6 +10,7 @@
 keyboard_name='AT Translated Set 2 keyboard'
 touchpad_name='SynPS/2 Synaptics TouchPad'
 osd_bin='/usr/bin/onboard'
+notify='off'
 #touchscreen_name='ELAN Touchscreen'
 
 ############### 
@@ -70,6 +71,13 @@ function rotate_screen {
 	echo "tbd"
 }
 
+function notify_user {
+	if [ $notify = "on" ]; then
+		notify-send -i input-tablet "Tablet mode toggled"
+	fi
+}
+
 ##main
 set_touchpad_state
 set_keyboard_state
+notify_user
