@@ -9,7 +9,9 @@
 ###############
 keyboard_name='AT Translated Set 2 keyboard'
 touchpad_name='SynPS/2 Synaptics TouchPad'
+osd_bin='/usr/bin/onboard'
 #touchscreen_name='ELAN Touchscreen'
+
 ############### 
 ##    end    ##
 
@@ -32,9 +34,11 @@ function set_keyboard_state {
 	if [ $kbstate != 0 ]; then 
 		echo "assuming enabled.."
 		disable_keyboard
+		eval '$osd_bin'
 	else
 		echo "assuming disabled.."
 		enable_keyboard
+		eval "/usr/bin/pkill -f $osd_bin"
 	fi
 
 }
@@ -53,12 +57,12 @@ function set_touchpad_state {
 
 function disable_touchpad {
 	xinput disable "$touchpad_name"
-	echo "I: Touchpad Disabled"
+	echo "Touchpad Disabled"
 }
 
 function enable_touchpad {
 	xinput enable "$touchpad_name"
-	echo "I: Touchpad Enabled"
+	echo "Touchpad Enabled"
 }
 
 function rotate_screen {
