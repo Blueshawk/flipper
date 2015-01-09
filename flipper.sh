@@ -83,10 +83,10 @@ function notify_user {
 # Currently reporting is incorrect, unclear or proper order yet
 
 	if [ $notify = "on" ]; then
-		if [ [ $tpstate = 0 ] && [ $kbstate = 0 ] ]; then
-			notify-send -i computer "Disabled Tablet mode"
+		if ([ $tpstate = 0 ] && [ $kbstate = 0 ]); then
+			notify-send -i computer "Disabling Tablet mode"
 		else
-			notify-send -i input-tablet "Enabled Tablet mode"
+			notify-send -i input-tablet "Enabling Tablet mode"
 		fi
 	fi
 }
@@ -106,5 +106,5 @@ function toggle_tablet_mode {
 #set_touchpad_state
 #set_keyboard_state
 get_input_states
-#notify_user
+notify_user
 toggle_tablet_mode
