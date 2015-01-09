@@ -7,7 +7,7 @@
 
 ##  config   ##
 ###############
-keyboard_name='Virtual core XTEST keyboard'  
+keyboard_name='AT Translated Set 2 keyboard'
 touchpad_name='SynPS/2 Synaptics TouchPad'
 #touchscreen_name='ELAN Touchscreen'
 ############### 
@@ -16,7 +16,27 @@ touchpad_name='SynPS/2 Synaptics TouchPad'
 
 ##### function area #####
 function disable_keyboard {
-	echo "tbd"
+	xinput disable "$keyboard_name"
+	echo "I: Keyboard Disabled"
+}
+
+function enable_keyboard {
+	xinput enable "$keyboard_name"
+	echo "I: Keyboard Enabled"
+}
+
+
+function set_keyboard_state {
+	kbstate=$(xinput list-props "$keyboard_name" | grep Enabled | awk '{print $4}')
+	echo "current state: $kbstate"
+	if [ $kbstate != 0 ]; then 
+		echo "assuming enabled.."
+		disable_keyboard
+	else
+		echo "assuming disabled.."
+		enable_keyboard
+	fi
+
 }
 
 function set_touchpad_state {
@@ -46,5 +66,6 @@ function rotate_screen {
 	echo "tbd"
 }
 
-#main
-set_touchpad_state
+##main
+#set_touchpad_state
+set_keyboard_state
