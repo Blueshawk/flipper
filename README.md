@@ -1,7 +1,7 @@
 # flipper
 Linux "Tablet Mode" for Acer R3-471t-54t1
 
-This script prepares your linux laptop for "tablet mode".  While its designed specifically for my use on the Acer R3-471t-54t1 it should work with any distro using X.
+This script prepares your linux laptop for flipping into "tablet mode".  While its designed specifically for my use on the Acer R3-471t-54t1 it should work with any distro using X.
 
 **What this does;**  
 -Checks Keyboard and Touchpad state  
