@@ -72,8 +72,16 @@ function rotate_screen {
 }
 
 function notify_user {
+# This will only work if notify=on and libnotify and notify-send are installed
+# Logic currently permits this from prompting on start and only prompts on end
+# Currently reporting is incorrect, unclear or proper order yet
+
 	if [ $notify = "on" ]; then
-		notify-send -i input-tablet "Tablet mode toggled"
+		if [ [ $tpstate = 0 ] && [ $kbstate = 0 ] ]; then
+			notify-send -i computer "Disabled Tablet mode"
+		else
+			notify-send -i input-tablet "Enabled Tablet mode"
+		fi
 	fi
 }
 
