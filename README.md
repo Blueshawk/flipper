@@ -10,7 +10,7 @@ What this does;
 -Provides a configuration option to notify the user via notify-send of state change as well as error notifications  
 -Provides arguments for verbose output when executed manually via bash [-v] and a dry-run option for state/device information [-n]  
 
-Suggested Use;
--Create a shortcut and place on your desktop/launcher etc and click once when you want to switch between modes
+Suggested Use;  
+-Create a shortcut and place on your desktop/launcher etc and click once when you want to switch between modes  
 
 This was written tested on Ubuntu 14.10
