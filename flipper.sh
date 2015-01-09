@@ -8,7 +8,7 @@
 ##  config   ##
 ###############
 keyboard_name='AT Translated Set 2 keyboard'
-touchpad_name='SynPS/2 Synaptics TouchPad'
+touchpad_name='SYN1B7B:01 06CB:2969 UNKNOWN'
 osd_bin='/usr/bin/onboard'
 notify='on' #set to anything else to disable
 #touchscreen_name='ELAN Touchscreen'
