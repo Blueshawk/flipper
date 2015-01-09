@@ -28,47 +28,53 @@ function enable_keyboard {
 	echo "I: Keyboard Enabled"
 }
 
+function get_keyboard_state {
+	kbstate=$(xinput list-props "$keyboard_name" | grep Enabled | awk '{print $4}')
+
+}
 
 function set_keyboard_state {
-	kbstate=$(xinput list-props "$keyboard_name" | grep Enabled | awk '{print $4}')
-	echo "current state: $kbstate"
+	echo "I: keyboard current state: $kbstate"
 	if [ $kbstate != 0 ]; then 
-		echo "assuming enabled.."
+		echo "I: assuming keyboard enabled.."
 		disable_keyboard
 		eval '$osd_bin'
 	else
-		echo "assuming disabled.."
+		echo "I: assuming keyboard disabled.."
 		enable_keyboard
 		eval "/usr/bin/pkill -f $osd_bin"
 	fi
 
 }
 
-function set_touchpad_state {
+function get_touchpad_state {
 	tpstate=$(xinput list-props "$touchpad_name" | grep Enabled | awk '{print $4}')
-	echo "current state: $tpstate"
+}
+
+function set_touchpad_state {
+	echo "I: touchpad current state: $tpstate"
 	if [ $tpstate != 0 ]; then 
-		echo "assuming enabled.."
+		echo "I: assuming touchpad enabled.."
 		disable_touchpad
 	else
-		echo "assuming disabled.."
+		echo "I: assuming touchpad disabled.."
 		enable_touchpad
 	fi
 }
 
 function disable_touchpad {
 	xinput disable "$touchpad_name"
-	echo "Touchpad Disabled"
+	echo "I: Touchpad Disabled"
 }
 
 function enable_touchpad {
 	xinput enable "$touchpad_name"
-	echo "Touchpad Enabled"
+	echo "I: Touchpad Enabled"
 }
 
 function rotate_screen {
 	#planned for 90,180,270, and 360 rotation via args
-	echo "tbd"
+	echo "I: tbd"
 }
 
 function notify_user {
@@ -85,6 +91,12 @@ function notify_user {
 	fi
 }
 
+function get_input_states {
+	get_touchpad_state
+	get_keyboard_state
+
+}
+
 function toggle_tablet_mode {
 	set_touchpad_state
 	set_keyboard_state
@@ -93,5 +105,6 @@ function toggle_tablet_mode {
 ##main
 #set_touchpad_state
 #set_keyboard_state
+get_input_states
+#notify_user
 toggle_tablet_mode
-notify_user
