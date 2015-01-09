@@ -18,8 +18,6 @@ debug='off' #set to on for verbose output or run with -v
 ##    end    ##
 
 
-
-
 ##### function area #####
 function disable_keyboard {
 	xinput disable "$keyboard_name"
@@ -42,7 +40,7 @@ function get_keyboard_state {
 
 function print_keyboard_state {
 if [ $debug = "on" ]; then
-	echo "I: keyboard current state: $kbstate"
+	echo "I: Keyboard: '$keyboard_name' Current State: $kbstate"
 	if [ $kbstate != 0 ]; then
 		echo "I: assuming keyboard enabled.."
 	else	
@@ -69,7 +67,7 @@ function get_touchpad_state {
 
 function print_touchpad_state {
 if [ $debug = "on" ]; then
-	echo "I: touchpad current state: $tpstate"
+	echo "I: Touchpad: '$touchpad_name' Current State: $tpstate"
 	if [ $tpstate != 0 ]; then
 		echo "I: assuming touchpad enabled.."
 	else	
@@ -123,8 +121,8 @@ function notify_user {
 function error_detection {
 	if [ $kbstate != $tpstate ]; then
 		echo "E: Incostitent States detected"
-		echo "E: Touchpad: $touchpad_name State = $tpstate"
-		echo "E: Keyboard: $keyboard_name State = $kbstate"
+		echo "E: Touchpad: '$touchpad_name' Current State = $tpstate"
+		echo "E: Keyboard: '$keyboard_name' Current State = $kbstate"
 		echo "E: Manually correct states in order for flipper to work"
 			if [ $notify = "on" ]; then
 				notify-send -i dialog-error "Not enabling tablet mode due to state errors, use -n to view"
@@ -172,7 +170,7 @@ while getopts "vn" opt; do
 		exit
 		;;
 	n)
-		echo "I: Dry-run, reporting state information only"
+		echo "I: Dry-run, reporting state information only!"
 		debug="on"
 		flipper_go_dry 
 		echo "I: TURN THIS THING OFF IM DRYYYYYYY"
