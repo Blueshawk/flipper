@@ -10,7 +10,7 @@
 keyboard_name='AT Translated Set 2 keyboard'
 touchpad_name='SynPS/2 Synaptics TouchPad'
 osd_bin='/usr/bin/onboard'
-notify='off'
+notify='on' #set to anything else to disable
 #touchscreen_name='ELAN Touchscreen'
 
 ############### 
@@ -77,7 +77,13 @@ function notify_user {
 	fi
 }
 
+function toggle_tablet_mode {
+	set_touchpad_state
+	set_keyboard_state
+}
+
 ##main
-set_touchpad_state
-set_keyboard_state
+#set_touchpad_state
+#set_keyboard_state
+toggle_tablet_mode
 notify_user
