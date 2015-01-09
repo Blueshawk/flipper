@@ -71,5 +71,5 @@ function rotate_screen {
 }
 
 ##main
-#set_touchpad_state
+set_touchpad_state
 set_keyboard_state
