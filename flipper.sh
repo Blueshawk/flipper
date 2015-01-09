@@ -23,14 +23,24 @@ function get_touchpad_state {
 	tpstate=$(xinput list-props "$touchpad_name" | grep Enabled | awk '{print $4}')
 	echo "current state: $tpstate"
 	if [ $tpstate != 0 ]; then 
-		echo "assuming enabled.."	
+		echo "assuming enabled.."
+		disable_touchpad
 	else
-		echo "assuming disabled.."	
+		echo "assuming disabled.."
+		enable_touchpad
 	fi
 }
 
-function disble_touchpad {
-	echo "tbd"
+function disable_touchpad {
+# post testing this will go in get_touchpad_state
+	xinput disable "$touchpad_name"
+	echo "I: Touchpad Disabled"
+}
+
+function enable_touchpad {
+# post testing this will go in get_touchpad_state
+	xinput enable "$touchpad_name"
+	echo "I: Touchpad Enabled"
 }
 
 function rotate_screen {
