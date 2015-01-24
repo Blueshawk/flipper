@@ -1,18 +1,15 @@
 #!/bin/bash
 # script for using acer r3-471t in "tablet mode"
 # disables keyboard and touchpad with a reversable mode
-# update the config section to match the device names gathered by xinput
-# script does not currently support rotation but is planned
-
+# update the config section to match the device names or id gathered by xinput
 
 ##  config   ##
 ###############
-keyboard_name='AT Translated Set 2 keyboard'
-touchpad_name='SYN1B7B:01 06CB:2969 UNKNOWN'
+keyboard_name='AT Translated Set 2 keyboard'  # can be id or name
+touchpad_name='SYN1B7B:01 06CB:2969 UNKNOWN'  # can be id or name
 osd_bin='/usr/bin/onboard'
 notify='on' #set to anything else to disable
 debug='off' #set to on for verbose output or run with -v
-#touchscreen_name='ELAN Touchscreen'
 
 ############### 
 ##    end    ##
@@ -53,7 +50,7 @@ function set_keyboard_state {
 	print_keyboard_state
 	if [ $kbstate != 0 ]; then 
 		disable_keyboard
-		eval '$osd_bin'
+		eval '$osd_bin &'
 	else
 		enable_keyboard
 		eval "/usr/bin/pkill -f $osd_bin"
@@ -99,10 +96,6 @@ function enable_touchpad {
 	fi
 }
 
-function rotate_screen {
-	#planned for 90,180,270, and 360 rotation via args
-	echo "I: tbd"
-}
 
 function notify_user {
 # This will only work if notify=on and libnotify and notify-send are installed
@@ -187,3 +180,4 @@ done
 
 # exec w/o args
 flipper_go
+exit
